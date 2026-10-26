@@ -108,6 +108,16 @@ const POGenerator = () => {
     const manufacturerSku = String(row["ManufacturerSKU"] || "").trim();
     const productName = String(row["Product Name"] || "").trim();
     const orderDate = String(row["OrderDate"] || "").trim();
+    const vendorCode = String(row["FactoryProcessVendorCode"] || "").trim().toUpperCase();
+    const manufacture = vendorCode === "MDC"
+      ? "Malakan Diamond Co."
+      : vendorCode === "RGLDIA"
+        ? "RGL"
+        : "";
+    const skuOrderQty = row["SKU Order Qty"];
+    const quantity = skuOrderQty == null || String(skuOrderQty).trim() === ""
+      ? ""
+      : String(skuOrderQty).trim();
 
     const addField = (label, value) => {
       if (value && String(value).trim()) {
@@ -150,7 +160,7 @@ const POGenerator = () => {
     <w:p><w:r><w:rPr><w:b/></w:rPr><w:t>Order Information</w:t></w:r></w:p>
     ${addField("Order #", orderNo)}
     ${addField("Date Created", orderDate)}
-    ${addField("Manufacture", "Malakan Diamond Co.")}
+    ${addField("Manufacture", manufacture)}
     ${addField("JD SKU", fmSku)}
     ${addField("Manufacturer SKU", manufacturerSku)}
     ${addField("Product Name", productName)}
@@ -173,7 +183,7 @@ const POGenerator = () => {
     ${addField("Width", row["AVGWidth"])}
     ${addField("Signature Stone", row["SignatureStone"])}
     ${threeStoneSection}
-    ${addField("Quantity", "1")}
+    ${addField("Quantity", quantity)}
     ${addField("Cost", row["VendorCost"])}
     ${addField("Remark", row["REMARK"])}
     
